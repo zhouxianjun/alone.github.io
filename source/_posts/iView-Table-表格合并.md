@@ -12,12 +12,9 @@ categories:
 - iView
 ---
 
-在项目开发中，总是有些地方需要把单元格合并的，比如订单列表：
-同一个订单号，不同的产品，则需要合并订单号等。
+在项目开发中，总是有些地方需要把单元格合并的，比如订单列表：同一个订单号，不同的产品，则需要合并订单号等。
 但是官方目前只支持表头的合并，还未支持单元格的合并，有人在Github上提了[Issues](https://github.com/iview/iview/issues/2751),
-但是官方一直没有解决，so。。。我就自己写了，一个方法：
-
-思路是：
+但是官方一直没有解决，so。。。我就自己写了，一个方法，思路是：
 1. 获取到Vue中iView到Table实例；
 2. 获取当前所有行数据（class为`ivu-table-row`）;
 ```javascript 1.6
@@ -67,4 +64,4 @@ rows[index].querySelector(`td:nth-of-type(${colIndex + 1 - (colSpanItem[index] |
 ```
 具体请看下面的例子：
 
-{% codepen pBqmVm [js,result] 330 600px zhouxianjun 0 %}
+{% codepen pBqmVm [js,result] 330 0 zhouxianjun 0 %}
