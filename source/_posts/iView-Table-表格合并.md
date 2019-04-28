@@ -64,4 +64,4 @@ rows[index].querySelector(`td:nth-of-type(${colIndex + 1 - (colSpanItem[index] |
 ```
 具体请看下面的例子：
 
-{% codepen pBqmVm [js,result] 330 0 zhouxianjun 0 %}
+{% codepen pBqmVm [js,result] 330 100% zhouxianjun 0 %}
