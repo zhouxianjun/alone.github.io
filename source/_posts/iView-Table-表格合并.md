@@ -62,6 +62,9 @@ if (rowSpan > 1) {
 ```javascript 1.6
 rows[index].querySelector(`td:nth-of-type(${colIndex + 1 - (colSpanItem[index] || 0)})`).setAttribute('rowspan', rowSpan);
 ```
+
+> 为了大家使用方便，我已经打包到`npm`，可以直接使用: [ivu-table-merge](https://www.npmjs.com/package/ivu-table-merge)
+
 具体请看下面的例子：
 
 {% codepen pBqmVm [js,result] 330 100% zhouxianjun 0 %}
