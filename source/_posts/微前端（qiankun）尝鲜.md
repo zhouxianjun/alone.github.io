@@ -1,5 +1,5 @@
 ---
-title: 微前端（qiankun）尝鲜
+title: 微前端（qiankun）尝鲜(vue)
 date: 2021-06-17 10:31:56
 tags:
 - single spa
