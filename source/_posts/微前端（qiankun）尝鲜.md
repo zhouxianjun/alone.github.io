@@ -52,9 +52,15 @@ categories:
   在现在技术不断更迭，保证技术栈不落后，需要在兼容已有系统的前提下，使用新框架去开发新功能。遗留系统功能已经完善，并且稳定运行，团队没有必要，也没有精力去将遗留系统重构一遍。此时团队如果需要使用新框架，新技术去开发新的应用，使用微前端是很好的解决方案。
 
 * 应用聚合
+  
   大型的互联网公司，或商业Saas平台，都会为用户/客户提供很多应用和服务，如何为用户呈现具有统一用户体验和一站式的应用聚合成为必须解决的问题。
   前端聚合已成为一个技术趋势，目前比较理想的解决方案就是微前端。
+  
 * 不同团队间开发同一个应用技术栈不同
+
+  把第三方的SaaS应用进行集成或者把第三方私服应用进行集成（比如在公司内部部署的 gitlab）等。以及在已有多个应用的情况下，需要将它们聚合为一个单应用。
+![](./micro.png)
+
 ## 什么是qiankun？
 qiankun 是一个基于 [single-spa](https://github.com/CanopyTax/single-spa) 的[微前端](https://micro-frontends.org/)实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。
 
@@ -225,7 +231,43 @@ externals: {
 }
 ```
 ### 父子共享（国际化）
-可以通过`loadMicroApp`手动加载子应用时通过`props`传递需要共享的对象给到子应用，然后在子应用的`bootstrap`或者`mount`钩子函数中获取，判断如果没有则使用子应用自己到对象否则直接使用主应用传入的对象。
+应用注册时或加载时，将依赖传递给子项目
+```js
+// 注册
+registerMicroApps([
+  {
+    name: 'micro-1', 
+    entry: 'http://localhost:9001/micro-1', 
+    container: '#micro-1', 
+    activeRule: '/micro-1', 
+    props: { i18n: this.$i18n }
+  },
+]);
+// 手动加载
+loadMicroApp({
+  name,
+  entry,
+  container: `#${this.boxId}`,
+  props: {
+    i18n: this.$i18n
+  }
+});
+```
+子应用启动时获取props参数初始化
+```js
+let { i18n } = props;
+if (!i18n) {
+  // 当独立运行时或主应用未共享时，动态加载本地国际化
+  const module = await import('@/common-module/lang');
+  i18n = module.default;
+}
+new Vue({
+  i18n,
+  router,
+  render
+});
+```
+主应用在注册子应用或者手动加载子应用时把共享的变量通过`props`传递给子应用，子应用在`bootstrap`或者`mount`钩子函数中获取，如果没有从`props`中获取到该变量，子应用则动态加载本地变量。
 ### keep-alive（Vue）
 > 其实并不建议做keepAlive，但是我还是做了，我能说什么...
 
