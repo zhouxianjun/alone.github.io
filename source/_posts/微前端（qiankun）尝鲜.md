@@ -59,7 +59,7 @@ categories:
 * 不同团队间开发同一个应用技术栈不同
 
   把第三方的SaaS应用进行集成或者把第三方私服应用进行集成（比如在公司内部部署的 gitlab）等。以及在已有多个应用的情况下，需要将它们聚合为一个单应用。
-![](./micro.png)
+![](/images/micro.png)
 
 ## 什么是qiankun？
 qiankun 是一个基于 [single-spa](https://github.com/CanopyTax/single-spa) 的[微前端](https://micro-frontends.org/)实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。
