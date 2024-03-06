@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="什么是微前端？ Techniques, strategies and recipes for building a modern web app with multiple teams that can ship features independently. – Micro Frontends 微前端是一种多个团队通过独立发布功能的方式来共同构建现代化 web 应用的技术手段及方法策略。  微前">
+<meta name="keywords" content="single spa,qiankun,微前端,乾坤">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微前端（qiankun）尝鲜(vue)">
+<meta property="og:url" content="https://blog.cn-face.com/2021/06/17/微前端（qiankun）尝鲜/index.html">
+<meta property="og:site_name" content="一股弱者的气息">
+<meta property="og:description" content="什么是微前端？ Techniques, strategies and recipes for building a modern web app with multiple teams that can ship features independently. – Micro Frontends 微前端是一种多个团队通过独立发布功能的方式来共同构建现代化 web 应用的技术手段及方法策略。  微前">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://blog.cn-face.com/images/micro.png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy93Uk5sV0tuMEE1TXdpYWo4MmtYdmNCN09HaWFlVGljMkdOcjZEMEMxTFQ1Wmg0aWFpY2VpYVJRSVVSWk5sb01pYU8wVkQyNXQyUjdKR3JkNDNvOWY5ZHNOZTQwancvNjQw?x-oss-process=image/format,png">
+<meta property="og:updated_time" content="2024-03-06T13:22:20.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微前端（qiankun）尝鲜(vue)">
+<meta name="twitter:description" content="什么是微前端？ Techniques, strategies and recipes for building a modern web app with multiple teams that can ship features independently. – Micro Frontends 微前端是一种多个团队通过独立发布功能的方式来共同构建现代化 web 应用的技术手段及方法策略。  微前">
+<meta name="twitter:image" content="https://blog.cn-face.com/images/micro.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://blog.cn-face.com/2021/06/17/微前端（qiankun）尝鲜/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>微前端（qiankun）尝鲜(vue) | 一股弱者的气息</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一股弱者的气息</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/zhouxianjun" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.cn-face.com/2021/06/17/微前端（qiankun）尝鲜/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alone zhou">
+      <meta itemprop="description" content="IT狗，程序猿，苦B奋斗为的中老年">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/5254523?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一股弱者的气息">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微前端（qiankun）尝鲜(vue)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-17 10:31:56" itemprop="dateCreated datePublished" datetime="2021-06-17T10:31:56+08:00">2021-06-17</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2024-03-06 21:22:20" itemprop="dateModified" datetime="2024-03-06T21:22:20+08:00">2024-03-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/微前端/" itemprop="url" rel="index"><span itemprop="name">微前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">17k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">16 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是微前端？"><a href="#什么是微前端？" class="headerlink" title="什么是微前端？"></a>什么是微前端？</h2><blockquote>
+<p>Techniques, strategies and recipes for building a modern web app with multiple teams that can ship features independently. – <a href="https://micro-frontends.org/" target="_blank" rel="noopener">Micro Frontends</a></p>
+<p>微前端是一种多个团队通过独立发布功能的方式来共同构建现代化 web 应用的技术手段及方法策略。</p>
+</blockquote>
+<p>微前端（Micro-Frontends）是一种类似于微服务的架构，它将微服务的理念应用于浏览器端，即将 Web 应用由单一的单体应用转变为多个小型前端应用聚合为一的应用。各个前端应用还可以独立运行、独立开发、独立部署，从而满足业务快速变化及分布式多团队并行开发的需求。<br>微前端不是单纯的前端框架或者工具，而是一套架构体系，这个概念最早在2016年底由ThoughtWorks提出。</p>
+<h2 id="核心价值"><a href="#核心价值" class="headerlink" title="核心价值"></a>核心价值</h2><ul>
+<li><p><strong>技术栈无关</strong></p>
+<p>主应用不限制接入子应用的技术栈，子应用拥有完全自主权。应用之间不应该有任何直接或间接的技术栈、依赖、以及实现上的耦合。</p>
+</li>
+<li><p>独立开发、独立部署</p>
+<p>微应用仓库独立，前后端可独立开发，部署完成后主框架自动完成同步更新。独立部署的能力在微前端体系中至关重要，能够缩小变更范围，进而降低相关风险。<br>各个微前端都应该有自己的持续交付管道；这些管道可以将微前端构建、测试并部署到生产环境中。</p>
+</li>
+<li><p>增量升级</p>
+<p>在面对各种复杂场景时，我们通常很难对一个已经存在的系统做全量的技术栈升级或重构，而微前端是一种非常好的实施渐进式重构的手段和策略。<br>逐渐升级我们的架构、依赖关系和用户体验。当主框架发生重大变化时每个微前端模块都可以按需升级，不需要整体下线或一次性升级所有内容。如果我们想要尝试新的技术或互动模式，也能在隔离度更好的环境下做试验。</p>
+</li>
+<li><p>简单、解耦、易维护</p>
+<p>微前端架构下的代码库倾向于更小/简单、更容易开发，避免无关组件之间不必要的耦合，让代码更简洁。通过界定清晰的应用边界来降低意外耦合的可能性，更好地避免无意间造成的这类耦合问题。</p>
+</li>
+</ul>
+<p>更多参考文献：</p>
+<ul>
+<li><a href="https://micro-frontends.org/" target="_blank" rel="noopener">Micro Frontends</a></li>
+<li><a href="https://martinfowler.com/articles/micro-frontends.html" target="_blank" rel="noopener">Micro Frontends from martinfowler.com</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/95085796" target="_blank" rel="noopener">微前端的核心价值</a></li>
+</ul>
+<h2 id="在什么场景下使用？"><a href="#在什么场景下使用？" class="headerlink" title="在什么场景下使用？"></a>在什么场景下使用？</h2><blockquote>
+<p>微前端架构旨在解决单体应用在一个相对长的时间跨度下，由于参与的人员、团队的增多、变迁，从一个普通应用演变成一个巨石应用(Frontend Monolith)后，随之而来的应用不可维护的问题。这类问题在企业级 Web 应用中尤其常见。</p>
+<ul>
+<li>兼容遗留系统</li>
+</ul>
+</blockquote>
+<p>  在现在技术不断更迭，保证技术栈不落后，需要在兼容已有系统的前提下，使用新框架去开发新功能。遗留系统功能已经完善，并且稳定运行，团队没有必要，也没有精力去将遗留系统重构一遍。此时团队如果需要使用新框架，新技术去开发新的应用，使用微前端是很好的解决方案。</p>
+<ul>
+<li><p>应用聚合</p>
+<p>大型的互联网公司，或商业Saas平台，都会为用户/客户提供很多应用和服务，如何为用户呈现具有统一用户体验和一站式的应用聚合成为必须解决的问题。<br>前端聚合已成为一个技术趋势，目前比较理想的解决方案就是微前端。</p>
+</li>
+<li><p>不同团队间开发同一个应用技术栈不同</p>
+<p>把第三方的SaaS应用进行集成或者把第三方私服应用进行集成（比如在公司内部部署的 gitlab）等。以及在已有多个应用的情况下，需要将它们聚合为一个单应用。<br><img src="/images/micro.png" alt></p>
+</li>
+</ul>
+<h2 id="什么是qiankun？"><a href="#什么是qiankun？" class="headerlink" title="什么是qiankun？"></a>什么是qiankun？</h2><p>qiankun 是一个基于 <a href="https://github.com/CanopyTax/single-spa" target="_blank" rel="noopener">single-spa</a> 的<a href="https://micro-frontends.org/" target="_blank" rel="noopener">微前端</a>实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。</p>
+<p>qiankun 孵化自蚂蚁金融科技基于微前端架构的云产品统一接入平台，在经过一批线上应用的充分检验及打磨后，我们将其微前端内核抽取出来并开源，希望能同时帮助社区有类似需求的系统更方便的构建自己的微前端系统，同时也希望通过社区的帮助将 qiankun 打磨的更加成熟完善。</p>
+<p>目前 qiankun 已在蚂蚁内部服务了超过 200+ 线上应用，在易用性及完备性上，绝对是值得信赖的。</p>
+<ul>
+<li>📦 <strong>基于 <a href="https://github.com/CanopyTax/single-spa" target="_blank" rel="noopener">single-spa</a></strong> 封装，提供了更加开箱即用的 API。</li>
+<li>📱 <strong>技术栈无关</strong>，任意技术栈的应用均可 使用/接入，不论是 React/Vue/Angular/JQuery 还是其他等框架。</li>
+<li>💪 <strong>HTML Entry 接入方式</strong>，让你接入微应用像使用 iframe 一样简单。</li>
+<li>🛡​ <strong>样式隔离</strong>，确保微应用之间样式互相不干扰。</li>
+<li>🧳 <strong>JS 沙箱</strong>，确保微应用之间 全局变量/事件 不冲突。</li>
+<li>⚡️ <strong>资源预加载</strong>，在浏览器空闲时间预加载未打开的微应用资源，加速微应用打开速度。</li>
+<li>🔌 <strong>umi 插件</strong>，提供了 <a href="https://github.com/umijs/plugins/tree/master/packages/plugin-qiankun" target="_blank" rel="noopener">@umijs/plugin-qiankun</a> 供 umi 应用一键切换成微前端架构系统。<blockquote>
+<p>摘自qiankun介绍</p>
+</blockquote>
+<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><h3 id="子应用静态资源404"><a href="#子应用静态资源404" class="headerlink" title="子应用静态资源404"></a>子应用静态资源404</h3></li>
+</ul>
+<ol>
+<li>所有图片等静态资源上传至 cdn，css 中直接引用 cdn 地址（推荐）</li>
+<li><p>将字体文件和图片打包成 base64（适用于字体文件和图片体积小的项目）(但总是有一些不符合要求的资源，请使用第三种)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack config loader, 添加以下rule到rules中</span></span><br><span class="line">&#123;</span><br><span class="line">  test: <span class="regexp">/\.(png|jpe?g|gif|webp|woff2?|eot|ttf|otf)$/i</span>,</span><br><span class="line">  use: [&#123;</span><br><span class="line">    loader: <span class="string">'url-loader'</span>,</span><br><span class="line">    options: &#123;&#125;,</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// chainWebpack</span></span><br><span class="line">config.module.rule(<span class="string">'fonts'</span>).use(<span class="string">'url-loader'</span>).loader(<span class="string">'url-loader'</span>).options(&#123;&#125;).end();</span><br><span class="line">config.module.rule(<span class="string">'images'</span>).use(<span class="string">'url-loader'</span>).loader(<span class="string">'url-loader'</span>).options(&#123;&#125;).end();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在打包时给其注入完整路径（适用于字体文件和图片体积比较大的项目）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> absolutePath = <span class="string">'子应用万维网可访问url'</span>;</span><br><span class="line"><span class="keyword">const</span> publicPath = <span class="string">`<span class="subst">$&#123;absolutePath&#125;</span><span class="subst">$&#123;config.output.get(<span class="string">'publicPath'</span>)&#125;</span>`</span>;</span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'fonts'</span>)</span><br><span class="line">      .use(<span class="string">'url-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'url-loader'</span>)</span><br><span class="line">      .options(&#123;</span><br><span class="line">        limit: <span class="number">4096</span>, <span class="comment">// 小于4kb将会被打包成 base64</span></span><br><span class="line">        fallback: &#123;</span><br><span class="line">          loader: <span class="string">'file-loader'</span>,</span><br><span class="line">          options: &#123;</span><br><span class="line">            name: <span class="string">'fonts/[name].[hash:8].[ext]'</span>,</span><br><span class="line">            publicPath</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">      .end();</span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'images'</span>)</span><br><span class="line">      .use(<span class="string">'url-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'url-loader'</span>)</span><br><span class="line">      .options(&#123;</span><br><span class="line">        limit: <span class="number">4096</span>, <span class="comment">// 小于4kb将会被打包成 base64</span></span><br><span class="line">        fallback: &#123;</span><br><span class="line">          loader: <span class="string">'file-loader'</span>,</span><br><span class="line">          options: &#123;</span><br><span class="line">            name: <span class="string">'img/[name].[hash:8].[ext]'</span>,</span><br><span class="line">            publicPath</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="css样式隔离"><a href="#css样式隔离" class="headerlink" title="css样式隔离"></a>css样式隔离</h3><p>默认情况qiankun会自动开启沙箱模式，但这个模式无法隔离主应用与子应用、或者同时加载多子应用的场景。<br>qiankun还给出了shadow dom的方案，需要配置<code>sandbox: { strictStyleIsolation: true }</code></p>
+<blockquote>
+<p>基于 ShadowDOM 的严格样式隔离并不是一个可以无脑使用的方案，大部分情况下都需要接入应用做一些适配后才能正常在 ShadowDOM 中运行起来比如 react 场景下需要解决这些<a href="https://github.com/facebook/react/issues/10422" target="_blank" rel="noopener">问题</a> ，使用者需要清楚开启了 strictStyleIsolation 意味着什么。下面会列出我解决ShadowDom的一些案例。</p>
+</blockquote>
+<h3 id="js-沙箱"><a href="#js-沙箱" class="headerlink" title="js 沙箱"></a>js 沙箱</h3><p>主要是隔离挂载在<code>window</code>上的变量，而qiankun内部已经帮你处理好了。在子应用运行时访问的<code>window</code>其实是一个<code>Proxy</code>代理对象。<br>所有子应用的全局变量变更都是在闭包中产生的，不会真正回写到 window 上，这样就能避免多实例之间的污染了。<br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy93Uk5sV0tuMEE1TXdpYWo4MmtYdmNCN09HaWFlVGljMkdOcjZEMEMxTFQ1Wmg0aWFpY2VpYVJRSVVSWk5sb01pYU8wVkQyNXQyUjdKR3JkNDNvOWY5ZHNOZTQwancvNjQw?x-oss-process=image/format,png" alt><br>`</p>
+<h3 id="fix-shadow-dom"><a href="#fix-shadow-dom" class="headerlink" title="fix shadow dom"></a>fix shadow dom</h3><ul>
+<li><p>getComputedStyle</p>
+<p>当获取shadow dom的计算样式的时候传入的element是<code>DocumentFragment</code>,会报错。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getComputedStyle = <span class="built_in">window</span>.getComputedStyle;</span><br><span class="line"><span class="built_in">window</span>.getComputedStyle = <span class="function">(<span class="params">el, ...args</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 如果为shadow dom则直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (el <span class="keyword">instanceof</span> DocumentFragment) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Reflect</span>.apply(getComputedStyle, <span class="built_in">window</span>, [el, ...args]);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>elementFromPoint</p>
+<p>根据坐标（x, y）当获取一个子应用的元素的时候，会返回shadow root，并不会返回真正的元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> elementFromPoint = <span class="built_in">document</span>.elementFromPoint;</span><br><span class="line"><span class="built_in">document</span>.elementFromPoint = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.apply(elementFromPoint, <span class="keyword">this</span>, [x, y]);</span><br><span class="line">  <span class="comment">// 如果坐标元素为shadow则用该shadow再次获取</span></span><br><span class="line">  <span class="keyword">if</span> (result &amp;&amp; result.shadowRoot) &#123;</span><br><span class="line">    <span class="keyword">return</span> result.shadowRoot.elementFromPoint(x, y);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>document 事件 target 为shadow</p>
+<p>当我们在document添加click、mousedown、mouseup等事件的时候，回调函数中的<code>event.target</code>不是真正的目标元素，而是shadow root元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fix: 点击事件target为shadow元素的问题</span></span><br><span class="line"><span class="keyword">const</span> &#123;<span class="attr">addEventListener</span>: oldAddEventListener, <span class="attr">removeEventListener</span>: oldRemoveEventListener&#125; = <span class="built_in">document</span>;</span><br><span class="line"><span class="keyword">const</span> fixEvents = [<span class="string">'click'</span>, <span class="string">'mousedown'</span>, <span class="string">'mouseup'</span>];</span><br><span class="line"><span class="keyword">const</span> overrideEventFnMap = &#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> setOverrideEvent = <span class="function">(<span class="params">eventName, fn, overrideFn</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (fn === overrideFn) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!overrideEventFnMap[eventName]) &#123;</span><br><span class="line">    overrideEventFnMap[eventName] = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  overrideEventFnMap[eventName].set(fn, overrideFn);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> resetOverrideEvent = <span class="function">(<span class="params">eventName, fn</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> eventFn = overrideEventFnMap[eventName]?.get(fn);</span><br><span class="line">  <span class="keyword">if</span> (eventFn) &#123;</span><br><span class="line">    overrideEventFnMap[eventName].delete(fn);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> eventFn || fn;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">document</span>.addEventListener = <span class="function">(<span class="params">event, fn, options</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> callback = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 当前事件对象为qiankun盒子，并且当前对象有shadowRoot元素，则fix事件对象为真实元素</span></span><br><span class="line">    <span class="keyword">if</span> (e.target.id?.startsWith(<span class="string">'__qiankun_microapp_wrapper'</span>) &amp;&amp; e.target?.shadowRoot) &#123;</span><br><span class="line">      fn(&#123;...e, <span class="attr">target</span>: e.path[<span class="number">0</span>]&#125;);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fn(e);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> eventFn = fixEvents.includes(event) ? callback : fn;</span><br><span class="line">  setOverrideEvent(event, fn, eventFn);</span><br><span class="line">  <span class="built_in">Reflect</span>.apply(oldAddEventListener, <span class="built_in">document</span>, [event, eventFn, options]);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">document</span>.removeEventListener = <span class="function">(<span class="params">event, fn, options</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> eventFn = resetOverrideEvent(event, fn);</span><br><span class="line">  <span class="built_in">Reflect</span>.apply(oldRemoveEventListener, <span class="built_in">document</span>, [event, eventFn, options]);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="复用公共依赖"><a href="#复用公共依赖" class="headerlink" title="复用公共依赖"></a>复用公共依赖</h3><blockquote>
+<p>比如企业中的util、core、request、ui等公共依赖，在微前端中，我们不需要每个子应用都加载一次，这样既浪费资源并且还会导致本来单例的对象，变成了多例。</p>
+</blockquote>
+<p>在webpack中配置<code>externals</code>。把需要复用的排除打包，然后在<code>index.html</code>中加载排除的lib外链（子应用需要在<code>script</code>或者<code>style</code>标签加上<code>ignore</code>属性，有了这个属性，qiankun 便不会再去加载这个 js/css，而子项目独立运行，这些 js/css 仍能被加载）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">ignore</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"//element-ui.css"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">ignore</span> <span class="attr">src</span>=<span class="string">"//element-ui.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">  <span class="string">'element-ui'</span>: &#123;</span><br><span class="line">    commonjs: <span class="string">'element-ui'</span>,</span><br><span class="line">    commonjs2: <span class="string">'element-ui'</span>,</span><br><span class="line">    amd: <span class="string">'element-ui'</span>,</span><br><span class="line">    root: <span class="string">'ElementUI'</span> <span class="comment">// 外链cdn加载挂载到window上的变量名</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="父子共享（国际化）"><a href="#父子共享（国际化）" class="headerlink" title="父子共享（国际化）"></a>父子共享（国际化）</h3><p>应用注册时或加载时，将依赖传递给子项目<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册</span></span><br><span class="line">registerMicroApps([</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">'micro-1'</span>, </span><br><span class="line">    entry: <span class="string">'http://localhost:9001/micro-1'</span>, </span><br><span class="line">    container: <span class="string">'#micro-1'</span>, </span><br><span class="line">    activeRule: <span class="string">'/micro-1'</span>, </span><br><span class="line">    props: &#123; <span class="attr">i18n</span>: <span class="keyword">this</span>.$i18n &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br><span class="line"><span class="comment">// 手动加载</span></span><br><span class="line">loadMicroApp(&#123;</span><br><span class="line">  name,</span><br><span class="line">  entry,</span><br><span class="line">  container: <span class="string">`#<span class="subst">$&#123;<span class="keyword">this</span>.boxId&#125;</span>`</span>,</span><br><span class="line">  props: &#123;</span><br><span class="line">    i18n: <span class="keyword">this</span>.$i18n</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>子应用启动时获取props参数初始化<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; i18n &#125; = props;</span><br><span class="line"><span class="keyword">if</span> (!i18n) &#123;</span><br><span class="line">  <span class="comment">// 当独立运行时或主应用未共享时，动态加载本地国际化</span></span><br><span class="line">  <span class="keyword">const</span> <span class="built_in">module</span> = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'@/common-module/lang'</span>);</span><br><span class="line">  i18n = <span class="built_in">module</span>.default;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  i18n,</span><br><span class="line">  router,</span><br><span class="line">  render</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>主应用在注册子应用或者手动加载子应用时把共享的变量通过<code>props</code>传递给子应用，子应用在<code>bootstrap</code>或者<code>mount</code>钩子函数中获取，如果没有从<code>props</code>中获取到该变量，子应用则动态加载本地变量。</p>
+<h3 id="keep-alive（Vue）"><a href="#keep-alive（Vue）" class="headerlink" title="keep-alive（Vue）"></a>keep-alive（Vue）</h3><blockquote>
+<p>其实并不建议做keepAlive，但是我还是做了，我能说什么…</p>
+</blockquote>
+<p>网上有其他方案，我没有采纳，我在这里说下我的方案吧（综合了网上的方案），使用<code>loadMicroApp</code>手动加载和卸载子应用。这里有几个难点：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// microApp.js (可以走CI/CD运维配置，也可以通过接口从服务器获取)</span></span><br><span class="line"><span class="keyword">const</span> apps = [&#123;</span><br><span class="line">  name: <span class="string">'micro-1'</span>,</span><br><span class="line">  activeRule: <span class="string">'/micro-1'</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  name: <span class="string">'micro-2'</span>,</span><br><span class="line">  activeRule: <span class="string">'/micro-2'</span>,</span><br><span class="line">  prefetch: <span class="literal">true</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  name: <span class="string">'micro-3'</span>,</span><br><span class="line">  activeRule: <span class="string">'/micro-3'</span>,</span><br><span class="line">  prefetch: <span class="literal">false</span>, <span class="comment">// 预加载资源</span></span><br><span class="line">  preload: <span class="literal">false</span>, <span class="comment">// 预渲染</span></span><br><span class="line">  keepalive: <span class="literal">true</span> <span class="comment">// 缓存子应用</span></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> apps.map(<span class="function"><span class="params">app</span> =&gt;</span> (&#123; ...app, <span class="attr">entry</span>: getEntryUrl(app.name) &#125;));</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div</span><br><span class="line">    v-show=&quot;isActive&quot;</span><br><span class="line">    :id=&quot;boxId&quot;</span><br><span class="line">    :class=&quot;b()&quot;</span><br><span class="line">  /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; loadMicroApp &#125; from &apos;qiankun&apos;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  name: &apos;MicroApp&apos;,</span><br><span class="line">  props: &#123;</span><br><span class="line">    app: &#123;</span><br><span class="line">      type: Object,</span><br><span class="line">      required: true</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  inject: [&apos;appLayout&apos;],</span><br><span class="line">  computed: &#123;</span><br><span class="line">    boxId() &#123;</span><br><span class="line">      return `micro-app_$&#123;this.app.name&#125;`;</span><br><span class="line">    &#125;,</span><br><span class="line">    activeRule() &#123;</span><br><span class="line">      return this.app.activeRule;</span><br><span class="line">    &#125;,</span><br><span class="line">    currentPath() &#123;</span><br><span class="line">      return this.$route.fullPath;</span><br><span class="line">    &#125;,</span><br><span class="line">    // 判断当前子应用是否为激活状态</span><br><span class="line">    isActive() &#123;</span><br><span class="line">      const &#123;activeRule, currentPath&#125; = this;</span><br><span class="line">      const rules = Array.isArray(activeRule) ? [ ...activeRule ] : [activeRule];</span><br><span class="line">      return rules.some(rule =&gt; &#123;</span><br><span class="line">        if (typeof rule === &apos;function&apos;) &#123;</span><br><span class="line">          return rule(currentPath);</span><br><span class="line">        &#125;</span><br><span class="line">        return currentPath.startsWith(`$&#123;rule&#125;`);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    isKeepalive() &#123;</span><br><span class="line">      return this.app.keepalive;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  watch: &#123;</span><br><span class="line">    isActive: &#123;</span><br><span class="line">      handler() &#123;</span><br><span class="line">        this.onActiveChange();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  created () &#123;</span><br><span class="line">    // 需要等spa start后再加载应用，才会有shadow节点</span><br><span class="line">    this.$once(&apos;started&apos;, () =&gt; &#123;</span><br><span class="line">      this.init();</span><br><span class="line">    &#125;);</span><br><span class="line">    // 把当前实例加入到layout中</span><br><span class="line">    this.appLayout.apps.set(this.app.name, this);</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    init() &#123;</span><br><span class="line">      // 预挂载</span><br><span class="line">      if (this.app.preload) &#123;</span><br><span class="line">        this.load();</span><br><span class="line">      &#125;</span><br><span class="line">      // 如果路由直接进入当前应用则会在这里挂载</span><br><span class="line">      this.onActiveChange();</span><br><span class="line">    &#125;,</span><br><span class="line">    /**</span><br><span class="line">     * 加载微应用</span><br><span class="line">     * @returns &#123;Promise&lt;void&gt;&#125;</span><br><span class="line">     */</span><br><span class="line">    async load() &#123;</span><br><span class="line">      if (!this.appInstance) &#123;</span><br><span class="line">        const &#123; name, entry, preload &#125; = this.app;</span><br><span class="line">        this.appInstance = loadMicroApp(&#123;</span><br><span class="line">          name,</span><br><span class="line">          entry,</span><br><span class="line">          container: `#$&#123;this.boxId&#125;`,</span><br><span class="line">          props: &#123;</span><br><span class="line">            ...,</span><br><span class="line">            appName: name,</span><br><span class="line">            preload,</span><br><span class="line">            active: this.isActive</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        await this.appInstance.mountPromise;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    /**</span><br><span class="line">     * 状态变更</span><br><span class="line">     * @returns &#123;Promise&lt;void&gt;&#125;</span><br><span class="line">     */</span><br><span class="line">    async onActiveChange() &#123;</span><br><span class="line">      // 触发全局事件</span><br><span class="line">      this.eventBus.$emit(`$&#123;this.isActive ? &apos;activated&apos; : &apos;deactivated&apos;&#125;:$&#123;this.app.name&#125;`);</span><br><span class="line">      // 如果当前为激活则加载</span><br><span class="line">      if (this.isActive) &#123;</span><br><span class="line">        await this.load();</span><br><span class="line">      &#125;</span><br><span class="line">      // 如果当前为失效并且当前应用已加载并且配置为不缓存则卸载当前应用</span><br><span class="line">      if (!this.isActive &amp;&amp; this.appInstance &amp;&amp; !this.isKeepalive) &#123;</span><br><span class="line">        await this.appInstance.unmount();</span><br><span class="line">        this.appInstance = null;</span><br><span class="line">      &#125;</span><br><span class="line">      // 通知布局当前状态变更</span><br><span class="line">      this.$emit(&apos;active&apos;, this.isActive);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">// App.vue (layout)</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;template v-if=&quot;!isMicroApp&quot;&gt;</span><br><span class="line">    &lt;keep-alive&gt;</span><br><span class="line">      &lt;router-view v-if=&quot;keepAlive&quot; /&gt;</span><br><span class="line">    &lt;/keep-alive&gt;</span><br><span class="line">    &lt;router-view v-if=&quot;!keepAlive&quot; /&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">  &lt;micro-app</span><br><span class="line">    v-for=&quot;app of microApps&quot;</span><br><span class="line">    :key=&quot;app.name&quot;</span><br><span class="line">    :app=&quot;app&quot;</span><br><span class="line">    @active=&quot;onMicroActive&quot;</span><br><span class="line">  /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  computed: &#123;</span><br><span class="line">    isMicroApp() &#123;</span><br><span class="line">      return !!this.currentMicroApp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted () &#123;</span><br><span class="line">    // 启动qiankun主应用，开启多例与严格样式隔离沙箱（shadow dom）</span><br><span class="line">    start(&#123; singular: false, sandbox: &#123; strictStyleIsolation: true &#125; &#125;);</span><br><span class="line">    // 过滤出需要预加载的子应用进行资源预加载</span><br><span class="line">    const prefetchAppList = this.microApps.filter(item =&gt; item.prefetch);</span><br><span class="line">    if (prefetchAppList.length) &#123;</span><br><span class="line">      // 延迟执行，放置影响当前访问的应用资源加载</span><br><span class="line">      (window.requestIdleCallback || setTimeout)(() =&gt; prefetchApps(prefetchAppList));</span><br><span class="line">    &#125;</span><br><span class="line">    // 触发微应用的初始化事件，代表spa已经started了</span><br><span class="line">    this.appValues.forEach(app =&gt; app.$emit(&apos;started&apos;));</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    onMicroActive() &#123;</span><br><span class="line">      this.currentMicroApp = this.appValues.find(item =&gt; item.isActive);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>路由的响应，如果我们不卸载keepAlive的子应用，则子应用依然会响应路由的变化，从而导致子应用的当前路由已经不是离开时的路由了。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 让vue-router支持keepalive，当主路由变更时如果当前子应用没有该路由则不做处理</span></span><br><span class="line"><span class="comment"> * 因为通过浏览器前进后退会先触发主路由的监听，导致没有及时通知到子应用deactivated，则子应用路由没有及时停止监听，则会处理本次主路由变更</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="variable">router</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> supportKeepAlive = <span class="function">(<span class="params">router</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> old = router.history.transitionTo;</span><br><span class="line">  router.history.transitionTo = <span class="function">(<span class="params">location, cb</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> matched = router.getMatchedComponents(location);</span><br><span class="line">    <span class="keyword">if</span> (!matched || !matched.length) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Reflect</span>.apply(old, router.history, [location, cb]);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 重写监听路由变更事件</span></span><br><span class="line">supportKeepAlive(instance.$router);</span><br><span class="line"><span class="comment">// 如果为预挂载并且当前不为激活状态则停止监听路由，并设置_startLocation为空，为了在激活的时候可以响应</span></span><br><span class="line"><span class="keyword">if</span> (preload &amp;&amp; !active) &#123;</span><br><span class="line">  <span class="comment">// 如果当前子应用不是预加载（我这里做了多个子应用并存且可以预加载），并且访问的不是当前子应用则把路由停止</span></span><br><span class="line">  instance.$router.history.teardown();</span><br><span class="line">  instance.$router.history._startLocation = <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>页面的<code>activated</code>与<code>deactivated</code>触发。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在子应用创建的时候监听激活与失效事件</span></span><br><span class="line"><span class="keyword">if</span> (eventBus) &#123;</span><br><span class="line">  eventBus.$on(<span class="string">`activated:<span class="subst">$&#123;appName&#125;</span>`</span>, activated);</span><br><span class="line">  eventBus.$on(<span class="string">`deactivated:<span class="subst">$&#123;appName&#125;</span>`</span>, deactivated);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取当前路由的组件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns <span class="type">&#123;*&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> getCurrentRouteInstance = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;matched&#125; = instance?.$route || &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (matched?.length) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; instances &#125; = matched[matched.length - <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span> (instances) &#123;</span><br><span class="line">      <span class="keyword">return</span> instances.default || instances;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 触发当前路由组件hook</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="variable">hook</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> fireCurrentRouterInstanceHook = <span class="function">(<span class="params">hook</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> com = getCurrentRouteInstance();</span><br><span class="line">  <span class="keyword">const</span> fns = com?.$options?.[hook];</span><br><span class="line">  <span class="keyword">if</span> (fns) &#123;</span><br><span class="line">    fns.forEach(<span class="function"><span class="params">fn</span> =&gt;</span> <span class="built_in">Reflect</span>.apply(fn, com, [&#123; <span class="attr">micro</span>: <span class="literal">true</span> &#125;]));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 激活当前子应用回调</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> activated = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  instance?.$router.history.setupListeners();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'setupListeners'</span>);</span><br><span class="line">  fireCurrentRouterInstanceHook(<span class="string">'activated'</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 被 keep-alive 缓存的组件停用时调用。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> deactivated = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  instance?.$router.history.teardown();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'teardown'</span>);</span><br><span class="line">  fireCurrentRouterInstanceHook(<span class="string">'deactivated'</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="vuex-全局状态共享（慎用，破坏了vuex的理念-不适用与大量的数据）"><a href="#vuex-全局状态共享（慎用，破坏了vuex的理念-不适用与大量的数据）" class="headerlink" title="vuex 全局状态共享（慎用，破坏了vuex的理念, 不适用与大量的数据）"></a>vuex 全局状态共享（慎用，破坏了vuex的理念, 不适用与大量的数据）</h3><blockquote>
+<p>子应用使用自己的vuex。并不是真正的使用主应用的vuex。需要恭喜的vuex模块主应用与子应用理论来说是引用的相同的文件，我们在这个vuex模块标记它是否需要共享<br>并watch主应用与子应用的该模块。当子应用中的state发生了改变则更新主应用的state，相反主应用的state变更后也同样修改子应用的state。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取命名空间状态数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param </span>state 状态数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param </span>namespace 命名空间</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns <span class="type">&#123;*&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> getNamespaceState = <span class="function">(<span class="params">state, namespace</span>) =&gt;</span> namespace === <span class="string">'root'</span> ? state : <span class="keyword">get</span>(state, namespace);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 更新状态数据</span><br><span class="line"> * @param store 状态存储</span><br><span class="line"> * @param namespace 命名空间</span><br><span class="line"> * @param value 新的值</span><br><span class="line"> * @returns &#123;*&#125;</span><br><span class="line"> *<span class="regexp">/</span></span><br><span class="line"><span class="regexp">const updateStoreState = (store, namespace, value) =&gt; store._withCommit(() =&gt; setVo(getNamespaceState(store.state, namespace), value));</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span>**</span><br><span class="line"> * 监听状态存储</span><br><span class="line"> * @param store 状态存储</span><br><span class="line"> * @param fn 变更事件函数</span><br><span class="line"> * @param namespace 命名空间</span><br><span class="line"> * @returns &#123;*&#125;</span><br><span class="line"> * @private</span><br><span class="line"> *<span class="regexp">/</span></span><br><span class="line"><span class="regexp">const _watch = (store, fn, namespace) =&gt; store.watch(state =&gt; getNamespaceState(state, namespace), fn, &#123; deep: true &#125;);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const updateSubStoreState = (stores, ns, value) =&gt; stores.filter(s =&gt; s.__shareNamespaces.has(ns)).forEach(s =&gt; updateStoreState(s, ns, value));</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default (store, mainStore) =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  /</span><span class="regexp">/ 如果有主应用存储则开启共享</span></span><br><span class="line"><span class="regexp">  if (mainStore) &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 多个子应用与主应用共享时判断主应用存储是否已经标记为已共享</span></span><br><span class="line"><span class="regexp">    if (mainStore.__isShare !== true) &#123;</span></span><br><span class="line"><span class="regexp">      /</span><span class="regexp">/ 所有子应用状态</span></span><br><span class="line"><span class="regexp">      mainStore.__subStores = new Set();</span></span><br><span class="line"><span class="regexp">      /</span><span class="regexp">/ 已监听的命名空间</span></span><br><span class="line"><span class="regexp">      mainStore.__subWatchs = new Map();</span></span><br><span class="line"><span class="regexp">      mainStore.__isShare = true;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 把当前子应用存储放入主应用里面</span></span><br><span class="line"><span class="regexp">    mainStore.__subStores.add(store);</span></span><br><span class="line"><span class="regexp">    const shareNames = new Set();</span></span><br><span class="line"><span class="regexp">    const &#123; _modulesNamespaceMap: moduleMap &#125; = store;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 监听当前store，更新主应用store，并统计该子应用需要共享的所有命名空间</span></span><br><span class="line"><span class="regexp">    Object.keys(moduleMap).forEach(key =&gt; &#123;</span></span><br><span class="line"><span class="regexp">      const names = key.split('/</span><span class="string">').filter(k =&gt; !!k);</span></span><br><span class="line"><span class="string">      // 如果该命名空间的上级命名空间已经共享则下级不需要再共享</span></span><br><span class="line"><span class="string">      const has = names.some(name =&gt; shareNames.has(name));</span></span><br><span class="line"><span class="string">      if (has) &#123;</span></span><br><span class="line"><span class="string">        return;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">      const &#123; _rawModule: &#123; share &#125; &#125; = moduleMap[key];</span></span><br><span class="line"><span class="string">      if (share === true) &#123;</span></span><br><span class="line"><span class="string">        const namespace = names.join('</span>.<span class="string">');</span></span><br><span class="line"><span class="string">        // 监听当前子应用存储的命名空间，发生变化后更新主应用与之同名的命名空间数据</span></span><br><span class="line"><span class="string">        _watch(store, value =&gt; updateStoreState(mainStore, namespace, value), namespace);</span></span><br><span class="line"><span class="string">        shareNames.add(namespace);</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // 存储当前子应用需要共享的命名空间</span></span><br><span class="line"><span class="string">    store.__shareNamespaces = shareNames;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    shareNames.forEach(ns =&gt; &#123;</span></span><br><span class="line"><span class="string">      // 从主应用同步数据</span></span><br><span class="line"><span class="string">      updateStoreState(store, ns, getNamespaceState(mainStore.state, ns));</span></span><br><span class="line"><span class="string">      if (mainStore.__subWatchs.has(ns)) &#123;</span></span><br><span class="line"><span class="string">        return;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">      // 监听主应用的状态，更新子应用存储</span></span><br><span class="line"><span class="string">      const w = mainStore.watch(state =&gt; getNamespaceState(state, ns), value =&gt; updateSubStoreState([...mainStore.__subStores], ns, value), &#123; deep: true &#125;);</span></span><br><span class="line"><span class="string">      console.log(`主应用store监听模块【$&#123;ns&#125;】数据`);</span></span><br><span class="line"><span class="string">      mainStore.__subWatchs.set(ns, w);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  return store;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Alone zhou</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://blog.cn-face.com/2021/06/17/微前端（qiankun）尝鲜/" title="微前端（qiankun）尝鲜(vue)">https://blog.cn-face.com/2021/06/17/微前端（qiankun）尝鲜/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/single-spa/" rel="tag"># single spa</a>
+          
+            <a href="/tags/qiankun/" rel="tag"># qiankun</a>
+          
+            <a href="/tags/微前端/" rel="tag"># 微前端</a>
+          
+            <a href="/tags/乾坤/" rel="tag"># 乾坤</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/07/vue-history-多模块nginx配置/" rel="next" title="vue history 多模块nginx配置">
+                <i class="fa fa-chevron-left"></i> vue history 多模块nginx配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzkwOS8yMDQ0NQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars2.githubusercontent.com/u/5254523?s=460&v=4" alt="Alone zhou">
+            
+              <p class="site-author-name" itemprop="name">Alone zhou</p>
+              <div class="site-description motion-element" itemprop="description">IT狗，程序猿，苦B奋斗为的中老年</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zhouxianjun" title="GitHub &rarr; https://github.com/zhouxianjun" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:715213471@qq.com" title="E-Mail &rarr; mailto:715213471@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是微前端？"><span class="nav-number">1.</span> <span class="nav-text">什么是微前端？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心价值"><span class="nav-number">2.</span> <span class="nav-text">核心价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在什么场景下使用？"><span class="nav-number">3.</span> <span class="nav-text">在什么场景下使用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是qiankun？"><span class="nav-number">4.</span> <span class="nav-text">什么是qiankun？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子应用静态资源404"><span class="nav-number">5.1.</span> <span class="nav-text">子应用静态资源404</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css样式隔离"><span class="nav-number">5.2.</span> <span class="nav-text">css样式隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js-沙箱"><span class="nav-number">5.3.</span> <span class="nav-text">js 沙箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-shadow-dom"><span class="nav-number">5.4.</span> <span class="nav-text">fix shadow dom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复用公共依赖"><span class="nav-number">5.5.</span> <span class="nav-text">复用公共依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父子共享（国际化）"><span class="nav-number">5.6.</span> <span class="nav-text">父子共享（国际化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keep-alive（Vue）"><span class="nav-number">5.7.</span> <span class="nav-text">keep-alive（Vue）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vuex-全局状态共享（慎用，破坏了vuex的理念-不适用与大量的数据）"><span class="nav-number">5.8.</span> <span class="nav-text">vuex 全局状态共享（慎用，破坏了vuex的理念, 不适用与大量的数据）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alone zhou</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">52k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">48 分钟</span>
+  
+</div>
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.0</div>
+
+
+
+
+<span class="post-meta-divider">|</span>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共12.2k字</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      访客访问次数：<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      站点浏览量：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script>
+  window.livereOptions = {
+    refer: '2021/06/17/微前端（qiankun）尝鲜/'
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
