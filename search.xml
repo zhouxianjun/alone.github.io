@@ -95,6 +95,55 @@
       </tags>
   </entry>
   <entry>
+    <title>制作自己的npm包并排除第三方依赖</title>
+    <url>/2020/06/12/%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84npm%E5%8C%85%E5%B9%B6%E6%8E%92%E9%99%A4%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96/</url>
+    <content><![CDATA[<p>在工作中，我们可能会遇到第三方包所提供的功能无法满足我们的需求的时候，或者公司公共组件。我们需要制作自己的npm包。</p>
+<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><ol>
+<li>在<code>npmjs.org</code>注册账户（公司私服则需要运维开账户）。</li>
+<li>检查本地<code>npm config registry</code>是否为<code>npmjs.org</code>或者公司私服地址。</li>
+<li>本地npm登录<code>npm login</code>输入账户/密码。然后会让你输入邮箱地址，这个为npmjs上配置的邮件地址。</li>
+</ol>
+<h3 id="编译npm项目"><a href="#编译npm项目" class="headerlink" title="编译npm项目"></a>编译npm项目</h3><blockquote>
+<p>可参考此项目 <a href="https://github.com/zhouxianjun/muse-ui-fabric" target="_blank" rel="noopener">https://github.com/zhouxianjun/muse-ui-fabric</a></p>
+</blockquote>
+<ol>
+<li>使用vue cli3 创建项目。</li>
+<li>如果组件中有使用到第三方依赖包并且不想编译在自己的组件中，则需要配置vue.config.js externals<blockquote>
+<p>我这里只是做了一个例子，实际情况看你有哪些第三方依赖不想编译则自行配置</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'production'</span>) &#123;</span><br><span class="line">          config.externals(&#123;</span><br><span class="line">                <span class="string">'lodash'</span>: &#123;</span><br><span class="line">                    commonjs: <span class="string">"lodash"</span>,<span class="comment">//如果我们的库运行在Node.js环境中，import _ from 'lodash'等价于const _ = require('lodash')</span></span><br><span class="line">                    commonjs2: <span class="string">"lodash"</span>,<span class="comment">//同上</span></span><br><span class="line">                    amd: <span class="string">"lodash"</span>,<span class="comment">//如果我们的库使用require.js等加载,等价于 define(["lodash"], factory);</span></span><br><span class="line">                    root: <span class="string">"_"</span> <span class="comment">// 这个为lodash暴露的变量</span></span><br><span class="line">                &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>在新建的项目中的components 目录下的文件全部删除（需要先把引用到的地方删除），然后把你的代码写在里面（当然你也可以不放在components中，只是我喜欢放在这里）。</li>
+<li>自己可以在App.vue中引用自己的组件测试。</li>
+<li>测通过后使用vue cli 打包<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vue-cli-service build --mode production --target lib ./src/components/index.js</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><ol>
+<li>在<code>package.json</code>中把private修改为false（如果你买了私有仓库就不用改）。</li>
+<li>在<code>package.json</code>新增或修改<code>main</code>字段为：<code>dist/你的项目名称.umd.min.js</code>。</li>
+<li><p>发布到仓库</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm publish</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果修改了代码想要重新发布，则必须先把<code>package.json</code>中的版本号<code>version</code>自行修改。</p>
+</li>
+<li>发布后，可以再新建一个空的vue项目，直接引用你刚才发布的组件，如果你组件中有依赖第三方组件，则npm会自动下载所需要的所有依赖，<br>如果在使用项目中不想让组件中的依赖编译到chunk-vendors文件中，则可以在使用项目中配置externals，例如：<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">          config.externals(&#123;</span><br><span class="line">                <span class="string">'lodash'</span>: <span class="string">'_'</span></span><br><span class="line">          &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>好了，今天就讲到这里，如有同学需要查看分析包内容则可以使用<code>vue ui</code>在任务中运行一个task然后点击分析，就可以分析每个打包后的js由哪些组成了。</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>npm</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
+        <tag>npmjs</tag>
+        <tag>制作npm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vue prerender-spa-plugin 预渲染</title>
     <url>/2020/06/18/vue-prerender-spa-plugin-%E9%A2%84%E6%B8%B2%E6%9F%93/</url>
     <content><![CDATA[<p>在做VUE H5单页面轻应用的时候，如果不优化则进入页面会很长时间的白屏，有很多种优化，我们这里主要讲<code>prerender-spa-plugin</code>预渲染。</p>
@@ -175,55 +224,6 @@
         <tag>lock</tag>
         <tag>distributed</tag>
         <tag>分布式锁</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>制作自己的npm包并排除第三方依赖</title>
-    <url>/2020/06/12/%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84npm%E5%8C%85%E5%B9%B6%E6%8E%92%E9%99%A4%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96/</url>
-    <content><![CDATA[<p>在工作中，我们可能会遇到第三方包所提供的功能无法满足我们的需求的时候，或者公司公共组件。我们需要制作自己的npm包。</p>
-<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><ol>
-<li>在<code>npmjs.org</code>注册账户（公司私服则需要运维开账户）。</li>
-<li>检查本地<code>npm config registry</code>是否为<code>npmjs.org</code>或者公司私服地址。</li>
-<li>本地npm登录<code>npm login</code>输入账户/密码。然后会让你输入邮箱地址，这个为npmjs上配置的邮件地址。</li>
-</ol>
-<h3 id="编译npm项目"><a href="#编译npm项目" class="headerlink" title="编译npm项目"></a>编译npm项目</h3><blockquote>
-<p>可参考此项目 <a href="https://github.com/zhouxianjun/muse-ui-fabric" target="_blank" rel="noopener">https://github.com/zhouxianjun/muse-ui-fabric</a></p>
-</blockquote>
-<ol>
-<li>使用vue cli3 创建项目。</li>
-<li>如果组件中有使用到第三方依赖包并且不想编译在自己的组件中，则需要配置vue.config.js externals<blockquote>
-<p>我这里只是做了一个例子，实际情况看你有哪些第三方依赖不想编译则自行配置</p>
-</blockquote>
-</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'production'</span>) &#123;</span><br><span class="line">          config.externals(&#123;</span><br><span class="line">                <span class="string">'lodash'</span>: &#123;</span><br><span class="line">                    commonjs: <span class="string">"lodash"</span>,<span class="comment">//如果我们的库运行在Node.js环境中，import _ from 'lodash'等价于const _ = require('lodash')</span></span><br><span class="line">                    commonjs2: <span class="string">"lodash"</span>,<span class="comment">//同上</span></span><br><span class="line">                    amd: <span class="string">"lodash"</span>,<span class="comment">//如果我们的库使用require.js等加载,等价于 define(["lodash"], factory);</span></span><br><span class="line">                    root: <span class="string">"_"</span> <span class="comment">// 这个为lodash暴露的变量</span></span><br><span class="line">                &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>在新建的项目中的components 目录下的文件全部删除（需要先把引用到的地方删除），然后把你的代码写在里面（当然你也可以不放在components中，只是我喜欢放在这里）。</li>
-<li>自己可以在App.vue中引用自己的组件测试。</li>
-<li>测通过后使用vue cli 打包<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vue-cli-service build --mode production --target lib ./src/components/index.js</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><ol>
-<li>在<code>package.json</code>中把private修改为false（如果你买了私有仓库就不用改）。</li>
-<li>在<code>package.json</code>新增或修改<code>main</code>字段为：<code>dist/你的项目名称.umd.min.js</code>。</li>
-<li><p>发布到仓库</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm publish</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果修改了代码想要重新发布，则必须先把<code>package.json</code>中的版本号<code>version</code>自行修改。</p>
-</li>
-<li>发布后，可以再新建一个空的vue项目，直接引用你刚才发布的组件，如果你组件中有依赖第三方组件，则npm会自动下载所需要的所有依赖，<br>如果在使用项目中不想让组件中的依赖编译到chunk-vendors文件中，则可以在使用项目中配置externals，例如：<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">          config.externals(&#123;</span><br><span class="line">                <span class="string">'lodash'</span>: <span class="string">'_'</span></span><br><span class="line">          &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>好了，今天就讲到这里，如有同学需要查看分析包内容则可以使用<code>vue ui</code>在任务中运行一个task然后点击分析，就可以分析每个打包后的js由哪些组成了。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>npm</category>
-      </categories>
-      <tags>
-        <tag>npm</tag>
-        <tag>npmjs</tag>
-        <tag>制作npm</tag>
       </tags>
   </entry>
   <entry>
